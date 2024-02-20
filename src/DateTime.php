@@ -1,6 +1,6 @@
 <?php
 
-namespace WaxFramework\RequestValidator;
+namespace WpMVC\RequestValidator;
 
 use DateTime as PhpDateTime;
 

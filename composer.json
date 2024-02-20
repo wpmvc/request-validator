@@ -1,8 +1,8 @@
 {
-    "name": "waxframework/request-validator",
+    "name": "wpmvc/request-validator",
     "autoload": {
         "psr-4": {
-            "WaxFramework\\RequestValidator\\": "src/"
+            "WpMVC\\RequestValidator\\": "src/"
         }
     },
     "authors": [

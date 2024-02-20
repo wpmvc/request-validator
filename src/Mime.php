@@ -1,6 +1,6 @@
 <?php
 
-namespace WaxFramework\RequestValidator;
+namespace WpMVC\RequestValidator;
 
 class Mime {
     public function validate( array $file, string $allowed_mimes ):bool {
