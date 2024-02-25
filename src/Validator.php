@@ -259,6 +259,10 @@ class Validator {
     protected function file_validator( string $input_name ) {
         $files = $this->wp_rest_request->get_file_params();
 
+        if ( ! isset( $files[$input_name] ) ) {
+            return;
+        }
+
         if ( ! empty( $files[$input_name]['size'] ) ) {
             return;
         }
