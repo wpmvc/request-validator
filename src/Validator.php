@@ -4,6 +4,7 @@ namespace WpMVC\RequestValidator;
 
 defined( "ABSPATH" ) || exit;
 
+use WpMVC\Exceptions\Exception;
 use WP_REST_Request;
 
 class Validator {
@@ -39,7 +40,7 @@ class Validator {
         $this->mime            = $mime;
     }
 
-    public function validate( array $rules ) {
+    public function validate( array $rules, bool $throw_errors = true ) {
         foreach ( $rules as $input_name => $rule ) {
             $explode_rules       = explode( '|', $rule );
             $this->explode_rules = $explode_rules;
@@ -48,6 +49,11 @@ class Validator {
                 static::validate_rule( $input_name, $explode_rule );
             }
         }
+
+        if ( $throw_errors && ! empty( $this->errors ) ) {
+            throw (new Exception( '', 422 ))->set_messages( $this->errors );
+        }
+
         return $this->errors;
     }
 
