@@ -24,3 +24,4 @@ Homestead.json
 .DS_Store
 composer.lock
 phpunit-report.xml
+phpcs-report.xml
