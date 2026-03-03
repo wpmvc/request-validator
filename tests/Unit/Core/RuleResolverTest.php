@@ -11,7 +11,9 @@ class RuleResolverTest extends TestCase {
         parent::tearDown();
         // Reset the singleton cache after each test to prevent pollution
         $reflection = new ReflectionProperty( RuleResolver::class, 'cache' );
-        $reflection->setAccessible( true );
+        if ( \PHP_VERSION_ID < 80100 ) {
+            $reflection->setAccessible( true );
+        }
         $reflection->setValue( null, [] );
     }
 
@@ -32,7 +34,9 @@ class RuleResolverTest extends TestCase {
         $this->assertInstanceOf( \WpMVC\RequestValidator\Rules\Min::class, $min_rule );
         
         $reflection = new ReflectionProperty( $min_rule, 'min' );
-        $reflection->setAccessible( true );
+        if ( \PHP_VERSION_ID < 80100 ) {
+            $reflection->setAccessible( true );
+        }
         $this->assertEquals( '5', $reflection->getValue( $min_rule ) );
     }
 
@@ -52,11 +56,15 @@ class RuleResolverTest extends TestCase {
         $this->assertInstanceOf( \WpMVC\RequestValidator\Rules\Between::class, $between_rule );
 
         $reflection_min = new ReflectionProperty( $between_rule, 'min' );
-        $reflection_min->setAccessible( true );
+        if ( \PHP_VERSION_ID < 80100 ) {
+            $reflection_min->setAccessible( true );
+        }
         $this->assertEquals( '1', $reflection_min->getValue( $between_rule ) );
 
         $reflection_max = new ReflectionProperty( $between_rule, 'max' );
-        $reflection_max->setAccessible( true );
+        if ( \PHP_VERSION_ID < 80100 ) {
+            $reflection_max->setAccessible( true );
+        }
         $this->assertEquals( '10', $reflection_max->getValue( $between_rule ) );
     }
 }
