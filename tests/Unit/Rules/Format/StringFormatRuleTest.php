@@ -102,4 +102,12 @@ class StringFormatRuleTest extends TestCase {
         $this->assertFalse( $not_regex->passes( 'test', 'UPPERCASE' ) );
         $this->assertTrue( $not_regex->passes( 'test', 'lowercase' ) );
     }
+
+    /**
+     * Test that rules like StartsWith handle non-string values gracefully.
+     */
+    public function test_starts_with_handles_non_string_values() {
+        $rule = RuleResolver::resolve( 'starts_with', ['api'] );
+        $this->assertFalse( $rule->passes( 'test', ['api', 'web'] ) );
+    }
 }

@@ -35,10 +35,10 @@ class RequiredIf extends Rule {
             return true;
         }
 
-        $target_value = $this->validator->wp_rest_request->get_param( $this->other_field );
+        $target_value = $this->validator->get_value( $this->other_field );
 
         if ( (string) $target_value === (string) $this->value ) {
-            return $this->validator->wp_rest_request->has_param( $attribute );
+            return ! $this->validator->data_is_empty( $attribute );
         }
 
         return true; 

@@ -32,7 +32,7 @@ class Different extends Rule {
             return true;
         }
 
-        $other_value = $this->validator->wp_rest_request->get_param( $this->other_field );
+        $other_value = $this->validator->get_value( $this->other_field );
 
         return $value !== $other_value;
     }

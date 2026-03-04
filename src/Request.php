@@ -73,6 +73,24 @@ class Request extends WP_REST_Request {
     }
 
     /**
+     * Determine if the request has any validation errors.
+     *
+     * @return bool
+     */
+    public function fails(): bool {
+        return ! empty( $this->errors );
+    }
+
+    /**
+     * Determine if the request has no validation errors.
+     *
+     * @return bool
+     */
+    public function passes(): bool {
+        return empty( $this->errors );
+    }
+
+    /**
      * Create a new Validation instance to evaluate.
      * Useful for fluent checking without throwing exceptions automatically.
      * 

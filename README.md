@@ -17,7 +17,7 @@ This package is included by default within the **WpMVC** framework.
 However, if you want to use this validation engine independently inside your own custom WordPress plugins, you may install it as a standalone package via Composer:
 
 ```bash
-composer require wpmvc/validator
+composer require wpmvc/request-validator
 ```
 ---
 
@@ -118,57 +118,57 @@ public function store( StorePostRequest $request ) {
 
 ### 🛠 Available Rules
 
-| Rule              | Description                                          |
-| ----------------- | ---------------------------------------------------- |
-| `accepted`        | Value must be in allowed list                        |
-| `after`           | Must be after given date                             |
-| `after_or_equal`  | Must be after or equal to given date                 |
-| `alpha`           | Must be entirely alphabetic characters               |
-| `alpha_dash`      | Must have alpha-numeric characters, dashes, and underscores |
-| `alpha_num`       | Must be entirely alpha-numeric characters            |
-| `array`           | Must be an array                                     |
-| `bail`            | Stop running validation rules after the first failure|
-| `before`          | Must be before given date                            |
-| `before_or_equal` | Must be before or equal to given date                |
-| `between:min,max` | Must have a size between the given min and max       |
-| `boolean`         | Must be `true` or `false`                            |
-| `confirmed`       | `field_confirmation` must match field                |
-| `date:format`     | Must be a date in given format                       |
-| `date_equals`     | Must exactly match a date                            |
-| `different:field` | Must have a different value than field               |
-| `digits:value`    | Must be numeric and have an exact length of value    |
-| `digits_between`  | Must be numeric and have a length between min,max    |
-| `email`           | Validates email format                               |
-| `ends_with:foo`   | Must end with one of the given values                |
-| `file`            | Checks file upload validity                          |
-| `image`           | Must be an image (jpeg, png, bmp, gif, svg, webp)    |
-| `in:foo,bar`      | Must be included in the given list of values         |
-| `integer`         | Must be an integer                                   |
-| `ip`              | Must be a valid IP address                           |
-| `ipv4`            | Must be a valid IPv4 address                         |
-| `ipv6`            | Must be a valid IPv6 address                         |
-| `json`            | Must be a valid JSON string                          |
-| `mac_address`     | Must be a valid MAC address                          |
-| `max`             | Max length/size/value (string, numeric, file, array) |
-| `mimes`           | Allowed file extensions (e.g. `jpg,png`)             |
-| `mimetypes`       | Must match one of the given MIME types               |
-| `min`             | Min length/size/value (string, numeric, file, array) |
-| `not_in:foo,bar`  | Must not be included in the given list of values     |
-| `not_regex`       | Must not match the given regular expression          |
-| `nullable`        | Field may be null or empty                           |
-| `numeric`         | Must be a numeric value                              |
-| `prohibited_unless`| Must be empty or not present unless field equals value|
-| `regex:pattern`   | Must match the given regular expression              |
-| `required`        | Field must be present and non-empty                  |
-| `required_if`     | Must be present if anotherfield is equal to value    |
-| `same:field`      | Must match the given field                           |
-| `size:value`      | Must have a size matching the given value            |
-| `sometimes`       | Run rules only if field is present in request        |
-| `starts_with:foo` | Must start with one of the given values              |
-| `string`          | Must be a string                                     |
-| `timezone`        | Must be a valid timezone identifier                  |
-| `url`             | Must be a valid URL                                  |
-| `uuid`            | Must be a valid UUID                                 |
+| Rule                          | Description                                                              |
+| ----------------------------- | ------------------------------------------------------------------------ |
+| `accepted`                    | Must be `yes`, `on`, `1`, `true`, `1`, or `true`.                        |
+| `after:date`                  | Must be after the given date (supports relative dates like `today`).      |
+| `after_or_equal:date`         | Must be after or equal to the given date.                                |
+| `alpha`                       | Must be entirely alphabetic characters.                                  |
+| `alpha_dash`                  | Must have alpha-numeric characters, dashes, and underscores.             |
+| `alpha_num`                   | Must be entirely alpha-numeric characters.                               |
+| `array`                       | Must be an array.                                                        |
+| `bail`                        | Stop running validation rules after the first failure.                   |
+| `before:date`                 | Must be before the given date.                                           |
+| `before_or_equal:date`        | Must be before or equal to the given date.                               |
+| `between:min,max`             | Must have a size between the given *min* and *max*.                      |
+| `boolean`                     | Must be a boolean value.                                                 |
+| `confirmed`                   | `field_confirmation` must match the field value.                         |
+| `date:format`                 | Must be a date in the given format (default: `Y-m-d`).                   |
+| `date_equals:date`            | Must exactly match the given date.                                       |
+| `different:field`             | Must have a different value than the specified *field*.                  |
+| `digits:value`                | Must be numeric and have an exact length of *value*.                     |
+| `digits_between:min,max`      | Must be numeric and have a length between *min* and *max*.               |
+| `email`                       | Must be a valid email address.                                           |
+| `ends_with:foo,bar,...`       | Must end with one of the given values.                                   |
+| `file`                        | Must be a valid uploaded file.                                           |
+| `image`                       | Must be an image (jpeg, png, bmp, gif, svg, webp).                       |
+| `in:foo,bar,...`              | Must be included in the given list of values.                            |
+| `integer`                     | Must be an integer.                                                      |
+| `ip`                          | Must be a valid IP address.                                              |
+| `ipv4`                        | Must be a valid IPv4 address.                                            |
+| `ipv6`                        | Must be a valid IPv6 address.                                            |
+| `json`                        | Must be a valid JSON string.                                             |
+| `mac_address`                 | Must be a valid MAC address.                                             |
+| `max:value`                   | Max length/size/value (string, numeric, file, array).                    |
+| `mimes:jpg,png,...`           | Allowed file extensions based on MIME types.                             |
+| `mimetypes:text/plain,...`    | Must match one of the given MIME types.                                  |
+| `min:value`                   | Min length/size/value (string, numeric, file, array).                    |
+| `not_in:foo,bar,...`          | Must not be included in the given list of values.                        |
+| `not_regex:pattern`           | Must not match the given regular expression.                             |
+| `nullable`                    | Field may be null or empty.                                              |
+| `numeric`                     | Must be a numeric value.                                                 |
+| `prohibited_unless:field,val` | Prohibited unless *field* is equal to any of the values.                 |
+| `regex:pattern`               | Must match the given regular expression.                                 |
+| `required`                    | Field must be present and non-empty.                                     |
+| `required_if:field,val`       | Required if the *field* is equal to the given *value*.                   |
+| `same:field`                  | Must match the value of the given *field*.                               |
+| `size:value`                  | Must have a matching size (string length, array count, file KB).         |
+| `sometimes`                   | Run rules only if the field is present in the request.                   |
+| `starts_with:foo,bar,...`     | Must start with one of the given values.                                 |
+| `string`                      | Must be a string.                                                        |
+| `timezone`                    | Must be a valid timezone identifier.                                     |
+| `url`                         | Must be a valid URL.                                                     |
+| `uuid`                        | Must be a valid UUID.                                                    |
 
 ---
 
@@ -218,6 +218,22 @@ $request->validate([
 ### 💬 Custom Error Messages & Rules
 
 You can customize the error messages by passing a third array to the `$request->make($request, $rules, $messages, $attributes)` method, or by overriding the `messages()` and `attributes()` methods in your `FormRequest` class. 
+
+#### Placeholders
+The following placeholders can be used within your custom error messages:
+- `:attribute`: The name of the field being validated.
+- `:min`, `:max`, `:size`: Respective numeric/size values.
+- `:other`: Name of the field being compared against.
+- `:value`, `:values`: The value(s) required by the rule.
+- `:format`: The expected date format.
+
+Example:
+```php
+$messages = [
+    'email.required' => 'We really need your :attribute!',
+    'age.min'        => 'You must be at least :min years old.',
+];
+```
 
 You can also pass inline Closures directly into the rules array for fast custom logic:
 
@@ -307,7 +323,7 @@ You can also use:
 ```php
 $request->validate($rules, false);
 if ( $request->fails() ) {
-    return Response::send(['errors' => $request->errors], 422);
+    wp_send_json_error(['errors' => $request->errors], 422);
 }
 ```
 

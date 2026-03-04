@@ -88,4 +88,25 @@ class NestedValidationTest extends TestCase {
         $this->assertArrayHasKey( 'users.1.posts.0.meta.key', $errors );
         $this->assertArrayNotHasKey( 'users.0.posts.1.meta.key', $errors );
     }
+
+    /**
+     * Test the "same" rule with nested dot notation.
+     */
+    public function test_same_rule_with_nested_dot_notation() {
+        $request = new WP_REST_Request( 'POST', '/test' );
+        $request->set_body_params( [
+            'user' => [
+                'password'              => 'secret',
+                'password_confirmation' => 'secret',
+            ],
+        ] );
+
+        $rules = [
+            'user.password_confirmation' => 'same:user.password',
+        ];
+
+        $validation = new Validation( $request, $rules );
+        
+        $this->assertTrue( $validation->passes(), 'The "same" rule should support dot notation for nested fields.' );
+    }
 }

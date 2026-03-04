@@ -28,6 +28,9 @@ class StartsWith extends Rule {
     }
 
     public function passes( string $attribute, $value ): bool {
+        if ( ! is_string( $value ) ) {
+            return false;
+        }
         foreach ( $this->prefixes as $prefix ) {
             if ( strpos( $value, $prefix ) === 0 ) {
                 return true;

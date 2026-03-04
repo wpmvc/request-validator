@@ -58,14 +58,18 @@ trait DateTime {
             $date = $request->get_param( $date );
         }
 
-        $date_array = date_parse_from_format( $format, $date );
-        return mktime(
-            $date_array['hour'] !== false ? $date_array['hour'] : 12,
-            $date_array['minute'] !== false ? $date_array['minute'] : 0,
-            $date_array['second'] !== false ? $date_array['second'] : 0,
-            $date_array['month'] !== false ? $date_array['month'] : 1,
-            $date_array['day'] !== false ? $date_array['day'] : 1,
-            $date_array['year'] !== false ? $date_array['year'] : 1970
-        );
+        $dt = PhpDateTime::createFromFormat( $format, $date );
+        
+        if ( ! $dt ) {
+            return 0;
+        }
+
+        // If the format doesn't include time components, createFromFormat might set them to current time or '?'
+        // We should ensure a consistent start-of-day for formats without time.
+        if ( strpos( $format, 'H' ) === false && strpos( $format, 'h' ) === false ) {
+            $dt->setTime( 0, 0, 0 );
+        }
+
+        return $dt->getTimestamp();
     }
 }

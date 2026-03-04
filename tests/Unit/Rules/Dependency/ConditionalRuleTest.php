@@ -66,4 +66,23 @@ class ConditionalRuleTest extends TestCase {
         );
         $this->assertTrue( $validation2->passes(), 'Prohibited rule rejected field even though condition was met.' );
     }
+
+    /**
+     * Test parameter resolution in RuleResolver specifically for required_if.
+     */
+    public function test_required_if_resolution_with_string_value() {
+        $request = new WP_REST_Request( 'POST', '/test' );
+        $request->set_body_params( [
+            'type' => 'admin',
+            'role' => '',
+        ] );
+
+        $rules = [
+            'role' => 'required_if:type,admin',
+        ];
+
+        $validation = new Validation( $request, $rules );
+        
+        $this->assertTrue( $validation->fails(), 'required_if should fail when the condition is met but field is empty.' );
+    }
 }

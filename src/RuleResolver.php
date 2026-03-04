@@ -97,9 +97,9 @@ class RuleResolver {
 
         // Some rules might need special instantiation or multiple parameters
         switch ( $rule ) {
-            case 'required_if':
             case 'between':
             case 'digits_between':
+                return new $class( $parameters[0], $parameters[1] );
             case 'date_equals':
             case 'before':
             case 'before_or_equal':
@@ -108,6 +108,8 @@ class RuleResolver {
                 return new $class( $parameters[0], $parameters[1] ?? 'Y-m-d' );
             case 'date':
                 return new $class( $parameters[0] ?? 'Y-m-d' );
+            case 'required_if':
+                return new $class( $parameters[0], $parameters[1] );
             case 'prohibited_unless':
                 return new $class( $parameters[0], array_slice( $parameters, 1 ) );
             case 'mimes':

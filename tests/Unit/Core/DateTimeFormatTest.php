@@ -97,4 +97,20 @@ class DateTimeFormatTest extends TestCase {
         $validation = new Validation( $request, $rules );
         $this->assertTrue( $validation->passes() );
     }
+
+    /**
+     * Regression test for flawed DateTime fallback logic.
+     */
+    public function test_date_rule_with_fallback_flaw() {
+        $request = new WP_REST_Request( 'POST', '/test' );
+        $today = date('Y-m-d');
+        $request->set_param( 'start_date', $today );
+
+        $rules = [
+            'start_date' => "after:$today",
+        ];
+
+        $validation = new Validation( $request, $rules );
+        $this->assertTrue( $validation->fails(), 'A date should not be "after" itself.' );
+    }
 }

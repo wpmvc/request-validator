@@ -27,7 +27,7 @@ class Confirmed extends Rule {
         }
 
         $confirmation_field = "{$attribute}_confirmation";
-        $confirmation_value = $this->validator->wp_rest_request->get_param( $confirmation_field );
+        $confirmation_value = $this->validator->get_value( $confirmation_field );
 
         return $value === $confirmation_value;
     }

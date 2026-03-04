@@ -35,9 +35,11 @@ class Between extends Rule {
             return true;
         }
 
-        // Check if it's a file first
-        if ( in_array( 'file', $this->validator->explode_rules ?? [] ) ) {
-            $files = $this->validator->wp_rest_request->get_file_params();
+        $rules = $this->validator->get_attribute_rules( $attribute );
+
+        // 1. Check if it's a file
+        $files = $this->validator->wp_rest_request->get_file_params();
+        if ( isset( $files[$attribute] ) && is_array( $files[$attribute] ) && isset( $files[$attribute]['tmp_name'] ) ) {
             if ( empty( $files[$attribute]['size'] ) ) {
                 return true;
             }
@@ -45,22 +47,24 @@ class Between extends Rule {
             return $size >= $this->min && $size <= $this->max;
         }
 
-        if ( in_array( 'numeric', $this->validator->explode_rules ?? [] ) || in_array( 'integer', $this->validator->explode_rules ?? [] ) ) {
+        // 2. Check if it's numeric
+        if ( is_numeric( $value ) && ( in_array( 'numeric', $rules, true ) || in_array( 'integer', $rules, true ) ) ) {
             $num = (float) $value;
             return $num >= $this->min && $num <= $this->max;
         }
 
-        if ( is_array( $value ) || in_array( 'array', $this->validator->explode_rules ?? [] ) ) {
-            $count = count( $value );
+        // 3. Check if it's an array
+        if ( is_array( $value ) || in_array( 'array', $rules, true ) ) {
+            $count = is_countable( $value ) ? count( $value ) : 0;
+            if ( ! is_array( $value ) && ! is_countable( $value ) ) {
+                $count = 0;
+            }
             return $count >= $this->min && $count <= $this->max;
         }
 
-        if ( is_string( $value ) ) {
-            $length = mb_strlen( $value );
-            return $length >= $this->min && $length <= $this->max;
-        }
-
-        return false;
+        // 4. Fallback to string length
+        $length = mb_strlen( (string) $value );
+        return $length >= $this->min && $length <= $this->max;
     }
 
     protected function default_message(): string {

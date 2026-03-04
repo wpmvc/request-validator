@@ -32,31 +32,29 @@ class Min extends Rule {
             return true;
         }
 
-        // Check if it's a file first
-        if ( in_array( 'file', $this->validator->explode_rules ?? [] ) ) {
-            $files = $this->validator->wp_rest_request->get_file_params();
+        $rules = $this->validator->get_attribute_rules( $attribute );
+
+        // 1. Check if it's a file
+        $files = $this->validator->wp_rest_request->get_file_params();
+        if ( isset( $files[$attribute] ) && is_array( $files[$attribute] ) && isset( $files[$attribute]['tmp_name'] ) ) {
             if ( empty( $files[$attribute]['size'] ) ) {
                 return true;
             }
             return ( $files[$attribute]['size'] / 1024 ) >= $this->min;
         }
 
-        if ( in_array( 'numeric', $this->validator->explode_rules ?? [] ) || in_array( 'integer', $this->validator->explode_rules ?? [] ) ) {
+        // 2. Check if it's numeric
+        if ( is_numeric( $value ) && in_array( 'numeric', $rules, true ) || in_array( 'integer', $rules, true ) ) {
             return (float) $value >= $this->min;
         }
 
-        if ( is_array( $value ) || in_array( 'array', $this->validator->explode_rules ?? [] ) ) {
-            if ( ! is_countable( $value ) ) {
-                return false;
-            }
-            return count( $value ) >= $this->min;
+        // 3. Check if it's an array
+        if ( is_array( $value ) || in_array( 'array', $rules, true ) ) {
+            return is_countable( $value ) && count( $value ) >= $this->min;
         }
 
-        if ( is_string( $value ) ) {
-            return mb_strlen( $value ) >= $this->min;
-        }
-
-        return false;
+        // 4. Fallback to string length
+        return mb_strlen( (string) $value ) >= $this->min;
     }
 
     protected function default_message(): string {

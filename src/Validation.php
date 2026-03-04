@@ -174,6 +174,16 @@ class Validation {
             if ( in_array( $explode_rule, [ 'nullable', 'sometimes', 'bail' ], true ) || $explode_rule instanceof Rules\Bail ) {
                 continue;
             }
+
+            // Skip validation if field is missing and rule is not implicit
+            if ( ! $this->data_has( $attribute ) && ! $this->is_implicit_rule( $explode_rule ) ) {
+                continue;
+            }
+
+            // Skip validation if value is empty and nullable is present
+            if ( $is_empty && in_array( 'nullable', $explode_rules, true ) && ! $this->is_implicit_rule( $explode_rule ) ) {
+                continue;
+            }
             
             if ( $explode_rule instanceof Contracts\Rule ) {
                 $this->validate_custom_rule( $attribute, $explode_rule );
@@ -506,5 +516,53 @@ class Validation {
         }
         
         return true;
+    }
+
+    /**
+     * Determine if a rule is "implicit" (should run even if value is empty).
+     *
+     * @param  mixed  $rule
+     * @return bool
+     */
+    protected function is_implicit_rule( $rule ): bool {
+        $implicit_rules = [ 'required', 'required_if', 'required_unless', 'required_with', 'required_with_all', 'required_without', 'required_without_all', 'accepted', 'filled', 'confirmed' ];
+        
+        if ( is_string( $rule ) ) {
+            $rule_name = explode( ':', $rule )[0];
+            return in_array( $rule_name, $implicit_rules, true );
+        }
+
+        if ( $rule instanceof Contracts\Rule ) {
+            return in_array( $rule::get_name(), $implicit_rules, true );
+        }
+
+        return false;
+    }
+
+    /**
+     * Determine if the given attribute is empty.
+     *
+     * @param  string  $attribute
+     * @return bool
+     */
+    public function data_is_empty( string $attribute ): bool {
+        $value = $this->get_value( $attribute );
+        return is_null( $value ) || ( is_string( $value ) && trim( $value ) === '' ) || ( is_array( $value ) && count( $value ) === 0 );
+    }
+
+    /**
+     * Get the rules for a given attribute.
+     *
+     * @param  string  $attribute
+     * @return array
+     */
+    public function get_attribute_rules( string $attribute ): array {
+        $rules = $this->rules[$attribute] ?? [];
+        
+        if ( is_string( $rules ) ) {
+            return explode( '|', $rules );
+        }
+
+        return $rules;
     }
 }

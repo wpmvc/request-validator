@@ -35,7 +35,7 @@ class ProhibitedUnless extends Rule {
             return true;
         }
 
-        $target_value = $this->validator->wp_rest_request->get_param( $this->other_field );
+        $target_value = $this->validator->get_value( $this->other_field );
 
         // If the other field's value is in our allowed values, then the field is allowed
         if ( in_array( (string) $target_value, array_map( 'strval', $this->values ), true ) ) {
@@ -43,7 +43,7 @@ class ProhibitedUnless extends Rule {
         }
 
         // Otherwise, it is prohibited (must not be present)
-        return ! $this->validator->wp_rest_request->has_param( $attribute );
+        return ! $this->validator->data_has( $attribute );
     }
 
     protected function default_message(): string {

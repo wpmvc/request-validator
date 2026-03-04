@@ -60,4 +60,14 @@ class SizeBoundaryRuleTest extends TestCase {
         $request->set_param( 'test', '1' );
         $this->assertTrue( ( new Validation( $request, ['test' => 'digits_between:2,4'] ) )->fails() );
     }
+
+    /**
+     * Test that min rule treats non-numeric values as strings for length validation.
+     */
+    public function test_min_rule_without_numeric_is_treated_as_string_length() {
+        $request = new WP_REST_Request();
+        $request->set_param( 'age', '123' );
+        $validation = new Validation( $request, ['age' => 'min:5'] );
+        $this->assertTrue( $validation->fails(), 'Min rule without numeric should check string length.' );
+    }
 }

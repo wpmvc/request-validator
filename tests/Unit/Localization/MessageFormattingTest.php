@@ -113,6 +113,9 @@ class MessageFormattingTest extends TestCase {
 
     public function test_custom_message_overrides() {
         $request = new WP_REST_Request( 'POST', '/test' );
+        $request->set_param( 'email_field', 'not-an-email' );
+        $request->set_param( 'numeric_field', 'abc' );
+        $request->set_param( 'required_field', '' );
         
         $rules = [
             'email_field'    => 'email',
@@ -136,6 +139,7 @@ class MessageFormattingTest extends TestCase {
 
     public function test_fluent_message_override_priority() {
         $request = new WP_REST_Request( 'POST', '/test' );
+        $request->set_param( 'email_field', 'not-an-email' );
         
         $rules = [
             'email_field' => ( new \WpMVC\RequestValidator\Rules\Email() )->message( 'FLUENT EMAIL MESSAGE' ),

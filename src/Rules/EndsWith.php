@@ -28,6 +28,9 @@ class EndsWith extends Rule {
     }
 
     public function passes( string $attribute, $value ): bool {
+        if ( ! is_string( $value ) ) {
+            return false;
+        }
         foreach ( $this->suffixes as $suffix ) {
             if ( substr( $value, -strlen( $suffix ) ) === $suffix ) {
                 return true;
