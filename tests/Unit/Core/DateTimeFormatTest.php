@@ -103,7 +103,7 @@ class DateTimeFormatTest extends TestCase {
      */
     public function test_date_rule_with_fallback_flaw() {
         $request = new WP_REST_Request( 'POST', '/test' );
-        $today = date('Y-m-d');
+        $today   = date( 'Y-m-d' );
         $request->set_param( 'start_date', $today );
 
         $rules = [

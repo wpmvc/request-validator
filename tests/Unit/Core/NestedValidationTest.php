@@ -94,12 +94,14 @@ class NestedValidationTest extends TestCase {
      */
     public function test_same_rule_with_nested_dot_notation() {
         $request = new WP_REST_Request( 'POST', '/test' );
-        $request->set_body_params( [
-            'user' => [
-                'password'              => 'secret',
-                'password_confirmation' => 'secret',
-            ],
-        ] );
+        $request->set_body_params(
+            [
+                'user' => [
+                    'password'              => 'secret',
+                    'password_confirmation' => 'secret',
+                ],
+            ] 
+        );
 
         $rules = [
             'user.password_confirmation' => 'same:user.password',

@@ -72,10 +72,12 @@ class ConditionalRuleTest extends TestCase {
      */
     public function test_required_if_resolution_with_string_value() {
         $request = new WP_REST_Request( 'POST', '/test' );
-        $request->set_body_params( [
-            'type' => 'admin',
-            'role' => '',
-        ] );
+        $request->set_body_params(
+            [
+                'type' => 'admin',
+                'role' => '',
+            ] 
+        );
 
         $rules = [
             'role' => 'required_if:type,admin',
